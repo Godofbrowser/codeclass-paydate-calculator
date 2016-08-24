@@ -1,0 +1,30 @@
+##########################################################################################
+#                                                                                        #
+# This file contains list of holidays for easier management                              #
+# Their description( OPTIONAL ) should be on the right in the following format           #
+# Do not use a valid date pattern( DD-MM-YYY ) in the description                        #
+# As it will match and will count.                                                       #
+#                                                                                        #
+##########################################################################################
+
+
+01-01-2016   #new year day
+08-03-2016   #no description
+20-03-2016   #
+25-03-2016   #
+28-03-2016   #
+02-05-2016   #
+30-05-2016   #
+20-06-2016   #
+05-07-2016   #
+06-07-2016   #
+07-07-2016   #
+13-09-2016   #
+14-09-2016   #
+12-12-2016   #
+21-12-2016   #
+12-12-2016   #
+14-04-2017   #
+17-04-2017   #
+01-05-2017   #
+29-05-2017   #
