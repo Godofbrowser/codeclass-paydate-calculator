@@ -7,4 +7,4 @@ This code uses a predefined algorithm( weekends &amp; public holidays considered
 -checks if a pay-date falls withing weekends
 -checks if a pay-date falls withing those specified holidays
 
-And prints out the valid paydays according to a certain algorithm.
+And prints out the valid paydays.
