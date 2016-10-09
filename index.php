@@ -2,14 +2,7 @@
 require_once('Paydate.php');
 use Paydate_calculator\Paydate;
 
-/* 
-** Immediately an holiday.txt file is found in the root directory,
-** this default array will be overridden by its valid holidays.
-*/
-
-$holidays = ['01-01-2016', '08-03-2016', '20-03-2016', '25-03-2016', '28-03-2016', '02-05-2016', '30-05-2016', '20-06-2016', '05-07-2016', '06-07-2016', '07-07-2016', '13-09-2016', '14-09-2016', '12-12-2016', '21-12-2016', '12-12-2016', '14-04-2017', '17-04-2017', '01-05-2017', '29-05-2017'];
-
-//lets check for the file
+//lets check for the file containing the holidays and create an array from it.
 $filename = "holidays.txt";
 if(file_exists($filename)):
 	$file = fopen($filename, 'r');
@@ -20,32 +13,26 @@ if(file_exists($filename)):
 endif;
 
 
-
-
 if(isset($_POST['submit']) && isset($_POST['qty']) && isset($_POST['monthlyPayday'])) {
 	date_default_timezone_set('Africa/Lagos') ? '' : die('Timezone could not be set');
-	$nextPaydate = new Paydate($_POST['monthlyPayday']); //int argument eg: 26. Defines the numerical value of the monthly pay day
+	$nextPaydate = new Paydate($_POST['monthlyPayday']);
+	$nextPaydate->setHolidays($holidays);
 	
 	for($i=0;$i < $_POST['qty']; $i++) {
-		/*
-		* So many road leads to a river. 
-		* one can still decide to use ereg("(Sat|Sun)",$nextPaydate->weekday_str) instead of in_array
-		* while checking for these two conditions below 
-		*/
-		while(in_array( $nextPaydate->weekday_str , ['Sat','Sun'] ))
+
+		while( $nextPaydate->isWeekend() )
 		{ 
 			$nextPaydate->increment(); 
 		}
-		while(in_array( $nextPaydate->date , $holidays ) || in_array( $nextPaydate->weekday_str , ['Sat','Sun'] ))
+		while( $nextPaydate->isHoliday() )
 		{ 
 			$nextPaydate->decrement(); 
 		}
-			$data[$i]['InitialPaydate'] = $nextPaydate->getInitialPaydate()->format('D, d M Y');
-			$data[$i]['Paydate'] = $nextPaydate->dateOBJ->format('D, d M Y');
-			$nextPaydate->next();
+		$data[$i]['initialPaydate'] = $nextPaydate->getInitialPaydate()->format('D, d M Y');
+		$data[$i]['paydate'] = $nextPaydate->getPaydate()->format('D, d M Y');
+		$nextPaydate->next();
 	}
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -98,8 +85,8 @@ if(isset($_POST['submit']) && isset($_POST['qty']) && isset($_POST['monthlyPayda
 			<tr><th>s/n</th><th>Initial Date</th><th>Pay Date</th</tr>
 			
 			<?php
-			foreach($data as $n=>$data){
-				echo "<tr><td>".($n+1)."</td><td>".$data['InitialPaydate']."</td><td>".$data['Paydate']."</td></tr>";
+			foreach($data as $index=>$data){
+				echo "<tr><td>".($index + 1)."</td><td>".$data['initialPaydate']."</td><td>".$data['paydate']."</td></tr>";
 			}
 			?>
 			
